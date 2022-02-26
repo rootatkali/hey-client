@@ -11,8 +11,7 @@ var logger = Logger();
 
 void main() {
   test('API Login Logout test', () async {
-    // TODO turn this method into api provider
-    // TODO create a working cookie store (shared prefs?)
+    // TODO Create API provider
     var dio = Dio();
     dio.interceptors.add(CookieInterceptor());
 

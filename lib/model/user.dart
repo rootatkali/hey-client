@@ -29,6 +29,9 @@ class User {
       this.gender,
       this.bio});
 
+  /// Returns the user's display name
+  String get name => lastName != null ? '$firstName $lastName' : '$firstName';
+
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserToJson(this);

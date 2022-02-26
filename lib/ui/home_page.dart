@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: _user == null
             ? const CircularProgressIndicator()
-            : Text('Hey, ${_user!.firstName}'),
+            : Text('Hey, ${_user!.name}'),
       ),
     );
   }
