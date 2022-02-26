@@ -17,9 +17,9 @@ dependencies:
   logger: any
   retrofit: ^3.0.0
   dio: ^4.0.0
-  dio_cookie_manager: ^2.0.0
   path_provider: ^2.0.0
   cookie_jar: ^3.0.0
+  shared_preferences: ^2.0.0
 
 dev_dependencies:
   flutter_test:

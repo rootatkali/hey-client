@@ -1,6 +1,6 @@
 class Endpoints {
   /// The base URL of the API
-  static const baseUrl = "http://127.0.0.1:8080/api";
+  static const baseUrl = "http://192.168.0.42:8080/api";
 
   // Users
   static const getUsers = "/users";
