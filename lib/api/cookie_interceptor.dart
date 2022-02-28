@@ -54,11 +54,21 @@ class CookieInterceptor extends Interceptor {
 
     // update cookies in list
     for (var c in cookies) {
-      var index = saved.indexWhere((s) => s.cookie.name == c.cookie.name);
+      // find cookie in list - name and domain match
+      final index = saved.indexWhere((s) =>
+          s.cookie.name == c.cookie.name && s.cookie.domain == c.cookie.domain);
+
+      final empty = c.cookie.value.isEmpty;
+
       if (index != -1) {
-        saved[index] = c; // replace already existing old cookie
-      } else {
-        saved.add(c);
+        // old cookie exists
+        if (empty) {
+          saved.removeAt(index); // remove cookie if empty
+        } else {
+          saved[index] = c; // replace old cookie if not empty
+        }
+      } else if (!empty) {
+        saved.add(c); // append to list, if not empty
       }
     }
 
