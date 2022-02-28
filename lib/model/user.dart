@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:hey/util/string_ext.dart';
 
 part 'user.g.dart';
 
@@ -30,7 +31,8 @@ class User {
       this.bio});
 
   /// Returns the user's display name
-  String get name => lastName != null ? '$firstName $lastName' : '$firstName';
+  String get name =>
+      lastName.isNullOrEmpty ? '$firstName' : '$firstName $lastName';
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
