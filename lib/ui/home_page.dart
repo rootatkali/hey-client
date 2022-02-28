@@ -32,8 +32,22 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: _user == null
             ? const CircularProgressIndicator()
-            : Text('Hey, ${_user!.name}'),
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Hey, ${_user!.name}'),
+                  ElevatedButton(
+                    onPressed: _logout,
+                    child: const Text('Logout'),
+                  )
+                ],
+              ),
       ),
     );
+  }
+
+  _logout() async {
+    await Constants.api.logout();
+    Navigator.pop(context);
   }
 }

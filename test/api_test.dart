@@ -25,6 +25,7 @@ void main() {
 
     assert(user.username == 'test');
     assert(user.email == 'test@hey.app');
+    <String>[].isNotEmpty;
 
     await api.logout();
   });
