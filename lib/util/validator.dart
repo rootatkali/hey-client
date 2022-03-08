@@ -8,37 +8,51 @@ class Validator {
   /// <ul>
   /// <li> length >= 3
   /// <li> is alphanum, starts with letter
-  static bool validateUsername(String? username) {
+  static String? validateUsername(String? username) {
     // length >= 3
-    if (username == null || username.length < 3) return false;
+    if (username == null || username.length < 3) {
+      return "Your username must contain at least 3 characters.";
+    }
 
     // alphanum, starts with letter
-    return RegExp(r'^[a-zA-Z][a-zA-Z0-9]+$', unicode: true).hasMatch(username);
+    return RegExp(r'^[a-zA-Z][a-zA-Z0-9]+$', unicode: true).hasMatch(username)
+        ? null
+        : "Your username must be alphanumeric and start with a letter.";
   }
 
   /// This one isn't possible to validate in Dart, due to different character
   /// object representations.
-  static bool validateName(String? name) => !name.isNullOrEmpty;
+  static String? validateName(String? name) =>
+      name.isNullOrEmpty ? "Your name must not be empty." : null;
 
   /// Validate email by using the same regex from the server
-  static bool validateEmail(String? email) {
-    if (email.isNullOrEmpty) return false;
+  static String? validateEmail(String? email) {
+    if (email.isNullOrEmpty) return "Your email is required.";
 
     return RegExp(r"^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$",
-            unicode: true)
-        .hasMatch(email!);
+                unicode: true)
+            .hasMatch(email!)
+        ? null
+        : "Your email is not valid.";
   }
 
   /// Validate mobile numbers according to the Israeli format
-  static bool validatePhoneNumber(String? number) {
+  static String? validatePhoneNumber(String? number) {
     // 10-digit number
-    if (number == null || number.length != 10) return false;
-    if (int.tryParse(number) == null) return false;
+    if (number == null || number.length != 10) {
+      return "Your phone number must be 10 digits.";
+    }
+    if (int.tryParse(number) == null) {
+      return "Your phone number must contain only numbers.";
+    }
 
+    const invalidNum = "Your number is not a valid mobile number.";
     // mobile carrier prefix
-    if (!number.startsWith("05")) return false;
+    if (!number.startsWith("05")) return invalidNum;
     return <String>['0', '1', '2', '3', '4', '5', '8']
-        .contains(number.substring(2, 3));
+            .contains(number.substring(2, 3))
+        ? null
+        : invalidNum;
   }
 
   /// Validate passwords according to the following terms:
@@ -50,10 +64,10 @@ class Validator {
   /// <li> Lowercase character
   /// <li> Digit
   /// <li> Any of the following special characters: <code>-,. !@#$%^&*()_+=/[]{}\</code>
-  static bool validatePassword(String? password) {
+  static String? validatePassword(String? password) {
     // 8 <= length <= 64
     if (password == null || password.length < 8 || password.length > 64) {
-      return false;
+      return "Your password must be between 8 and 64 characters.";
     }
 
     int checks = 0;
@@ -68,6 +82,6 @@ class Validator {
     if (RegExp(r'[-,. !@#$%^&*()_+=/\[\]{}\\]', unicode: true)
         .hasMatch(password)) checks++;
 
-    return checks >= 3;
+    return checks >= 3 ? null : "Your password isn't secure enough.";
   }
 }

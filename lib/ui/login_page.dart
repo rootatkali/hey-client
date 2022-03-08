@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hey/api/endpoints.dart';
 import 'package:hey/model/login.dart';
 import 'package:hey/ui/home_page.dart';
+import 'package:hey/ui/register_page.dart';
 import 'package:hey/util/constants.dart';
 import 'package:logger/logger.dart';
 
@@ -51,6 +52,13 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: login,
                 child: const Text('Log in'),
               ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(16),
+              child: ElevatedButton(
+                onPressed: register,
+                child: const Text('Not registered?'),
+              ),
             )
           ],
         ),
@@ -63,6 +71,11 @@ class _LoginPageState extends State<LoginPage> {
     logger.i(Endpoints.baseUrl);
     var user = await Constants.api.login(login);
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const HomePage()));
+        context, MaterialPageRoute(builder: (ctx) => const HomePage()));
+  }
+
+  register() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (ctx) => RegisterPage()));
   }
 }

@@ -48,6 +48,6 @@ class _HomePageState extends State<HomePage> {
 
   _logout() async {
     await Constants.api.logout();
-    Navigator.pop(context);
+    Navigator.pop(context); // TODO named routes, pop until login
   }
 }
