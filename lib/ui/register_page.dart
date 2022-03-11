@@ -6,6 +6,8 @@ import 'package:hey/util/constants.dart';
 import 'package:hey/util/validator.dart';
 
 class RegisterPage extends StatefulWidget {
+  static const path = '/register';
+
   const RegisterPage({Key? key}) : super(key: key);
 
   @override
@@ -93,8 +95,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       var user = await Constants.api.createUser(reg);
 
-      Navigator.push(
-          context, MaterialPageRoute(builder: (ctx) => const HomePage()));
+      Navigator.pop(context, user);
     }
   }
 }
