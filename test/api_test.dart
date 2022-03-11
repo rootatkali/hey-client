@@ -11,7 +11,7 @@ var logger = Logger();
 
 void main() {
   test('API Login Logout test', () async {
-    // TODO Create API provider
+    // TODO Create API provider (GH-14)
     var dio = Dio();
     dio.interceptors.add(CookieInterceptor());
 

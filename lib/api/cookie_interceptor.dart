@@ -73,7 +73,13 @@ class CookieInterceptor extends Interceptor {
     }
 
     final list = saved.map((c) => c.toString()).toList();
-    await _prefs!.setStringList(key, list);
+
+    // remove key if list empty - see ui/HomePage#initState for reason
+    if (list.isNotEmpty) {
+      await _prefs!.setStringList(key, list);
+    } else {
+      await _prefs!.remove(key);
+    }
 
     handler.next(response);
   }
