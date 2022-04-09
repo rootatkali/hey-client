@@ -32,8 +32,9 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  /// Opens login screen and waits for result
-  _login() async {
+  /// Opens a new [LoginPage] and waits for result, which should be an instance
+  /// of [User].
+  void _login() async {
     final user = await Navigator.pushNamed(context, LoginPage.path);
 
     if (user is User) {
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  _fetchUser() async {
+  void _fetchUser() async {
     try {
       var user = await Constants.api.getMe();
 
@@ -63,25 +64,79 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).canvasColor,
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        title: Text(
+          'Hey, ${_user?.firstName ?? 'you'}', // TODO Replace 'Hey' with logo
+          style: TextStyle(
+            color: Theme.of(context).primaryColorDark,
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextButton(
+              onPressed: _profile,
+              child: Icon(
+                // TODO Replace with pfp
+                Icons.account_circle_outlined,
+                color: Theme.of(context).primaryColorDark,
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    Theme.of(context).primaryColorLight),
+                shape: MaterialStateProperty.all(const CircleBorder()),
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(16),
         child: _user == null
             ? const CircularProgressIndicator()
             : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Hey, ${_user!.name}'),
-                  ElevatedButton(
-                    onPressed: _logout,
-                    child: const Text('Logout'),
-                  )
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _generatePendingRequests(),
+                  _generateFriendList(),
+                  _generateSuggestions(),
                 ],
               ),
       ),
     );
   }
 
-  _logout() async {
+  void _profile() {
+    // TODO Implement profile page
+    throw UnimplementedError();
+  }
+
+  void _logout() async {
     await Constants.api.logout();
     _login();
+  }
+
+  Widget _generatePendingRequests() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
+      child: const Text('New friend requests go here'),
+    );
+  }
+
+  Widget _generateFriendList() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: const Text('Friend list goes here'),
+    );
+  }
+
+  Widget _generateSuggestions() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(0, 8, 0, 16),
+      child: const Text('Friend suggestions go here'),
+    );
   }
 }

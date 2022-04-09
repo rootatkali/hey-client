@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
         DetailsPage.path: (ctx) => const DetailsPage(),
       },
       initialRoute: HomePage.path,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
