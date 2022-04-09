@@ -8,6 +8,12 @@ class Endpoints {
   static const createUser = "/users";
   static const login = "/login";
   static const getMe = "/me";
+  static const editMe = "/me";
   static const logout = "/logout";
+
+  // Verify
+  static const getSchools = "/schools";
+  static const isVerified = "/verify";
+  static const verifyMashov = "/verify/mashov";
 }
 

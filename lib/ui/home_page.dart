@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hey/api/cookie_interceptor.dart';
 import 'package:hey/model/user.dart';
@@ -47,11 +48,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   _fetchUser() async {
-    var user = await Constants.api.getMe();
+    try {
+      var user = await Constants.api.getMe();
 
-    setState(() {
-      _user = user;
-    });
+      setState(() {
+        _user = user;
+      });
+    } on DioError catch (e) {
+      widget.log.e('Web Error', e);
+      _login();
+    }
   }
 
   @override

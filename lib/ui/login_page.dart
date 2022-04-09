@@ -7,8 +7,6 @@ import 'package:hey/util/constants.dart';
 import 'package:hey/util/log.dart';
 import 'package:logger/logger.dart';
 
-final logger = Logger();
-
 class LoginPage extends StatefulWidget with Log {
   static const path = '/login';
 
@@ -83,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
         onWillPop: () async => false);
   }
 
-  login() async {
+  void login() async {
     final login = Login(username: _user.text, password: _pass.text); // model
 
     setState(() => _loading = true);
@@ -96,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.pop(context, user);
   }
 
-  register() async {
+  void register() async {
     final callback = await Navigator.pushNamed(context, RegisterPage.path);
 
     if (callback is User) {
