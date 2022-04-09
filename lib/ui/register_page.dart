@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hey/model/user.dart';
 import 'package:hey/model/user_registration.dart';
 import 'package:hey/ui/home_page.dart';
+import 'package:hey/ui/verify_page.dart';
 import 'package:hey/util/constants.dart';
+import 'package:hey/util/log.dart';
 import 'package:hey/util/validator.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget with Log {
   static const path = '/register';
 
   const RegisterPage({Key? key}) : super(key: key);
@@ -69,7 +72,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.digitsOnly
                     ],
-                    decoration: const InputDecoration(labelText: "Phone number"),
+                    decoration:
+                        const InputDecoration(labelText: "Phone number"),
                   ),
                   Container(
                     padding: const EdgeInsets.all(16),
@@ -83,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  register() async {
+  void register() async {
     if (_form.currentState!.validate()) {
       var reg = UserRegistration(
           username: _user.text,
@@ -95,7 +99,14 @@ class _RegisterPageState extends State<RegisterPage> {
 
       var user = await Constants.api.createUser(reg);
 
-      Navigator.pop(context, user);
+      var verifyCallback =
+          await Navigator.pushNamed(context, VerifyPage.path, arguments: user);
+
+      if (verifyCallback is User) {
+        Navigator.pop(context, verifyCallback);
+      } else {
+        widget.log.wtf('Verify page callback not user: $verifyCallback');
+      }
     }
   }
 }

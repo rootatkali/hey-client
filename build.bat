@@ -1,1 +1,3 @@
-flutter pub run build_runner build 
+@echo off
+flutter pub run build_runner build
+@echo on
