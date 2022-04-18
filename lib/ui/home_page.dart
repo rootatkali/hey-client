@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hey/api/cookie_interceptor.dart';
 import 'package:hey/model/user.dart';
+import 'package:hey/ui/friend.dart';
 import 'package:hey/ui/login_page.dart';
 import 'package:hey/util/constants.dart';
 import 'package:hey/util/log.dart';
@@ -80,7 +81,7 @@ class _HomePageState extends State<HomePage> {
             child: TextButton(
               onPressed: _profile,
               child: Icon(
-                // TODO Replace with pfp
+                // TODO Replace with CircleAvatar
                 Icons.account_circle_outlined,
                 color: Theme.of(context).primaryColorDark,
               ),
@@ -97,8 +98,8 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.all(16),
         child: _user == null
             ? const CircularProgressIndicator()
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            : ListView(
+                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   _generatePendingRequests(),
                   _generateFriendList(),
@@ -111,7 +112,9 @@ class _HomePageState extends State<HomePage> {
 
   void _profile() {
     // TODO Implement profile page
-    throw UnimplementedError();
+    // widget.log.i('Profile picture pressed');
+    // throw UnimplementedError();
+    _logout();
   }
 
   void _logout() async {
@@ -122,7 +125,28 @@ class _HomePageState extends State<HomePage> {
   Widget _generatePendingRequests() {
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
-      child: const Text('New friend requests go here'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('New friend requests go here'),
+          Row(
+            children: [
+              Friend(
+                profilePicture: const NetworkImage(
+                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+                ),
+                name: "Friend",
+                status: FriendStatus.online,
+                callToAction: ElevatedButton(
+                  onPressed: () => widget.log.i('CTA pressed'),
+                  child: const Text('hello'),
+                ),
+                onPressed: () => widget.log.i('Card pressed'),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 

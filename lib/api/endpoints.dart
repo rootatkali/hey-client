@@ -1,6 +1,6 @@
 class Endpoints {
   /// The base URL of the API
-  static const baseUrl = "http://192.168.0.42:8080/api";
+  static const baseUrl = "http://127.0.0.1:8080/api";
 
   // Users
   static const getUsers = "/users";
@@ -9,11 +9,17 @@ class Endpoints {
   static const login = "/login";
   static const getMe = "/me";
   static const editMe = "/me";
+  static const getLocation = "/me/location";
+  static const setLocation = "/me/location";
   static const logout = "/logout";
 
   // Verify
   static const getSchools = "/schools";
   static const isVerified = "/verify";
   static const verifyMashov = "/verify/mashov";
+
+  // Interests
+  static const getInterests = "/interests";
+
 }
 

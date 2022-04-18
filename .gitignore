@@ -44,3 +44,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Files containing secrets (api keys, north korean nuclear camp addresses, system tokens etc)
+secret_*

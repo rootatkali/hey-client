@@ -10,7 +10,7 @@ part of 'api_client.dart';
 
 class _ApiClient implements ApiClient {
   _ApiClient(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://192.168.0.42:8080/api';
+    baseUrl ??= 'http://127.0.0.1:8080/api';
   }
 
   final Dio _dio;
@@ -118,6 +118,7 @@ class _ApiClient implements ApiClient {
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(edit.toJson());
+    _data.removeWhere((k, v) => v == null);
     final _result = await _dio.fetch<Map<String, dynamic>>(_setStreamType<User>(
         Options(
                 method: 'PATCH',
@@ -128,6 +129,43 @@ class _ApiClient implements ApiClient {
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = User.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<LatLon> getMyLocation() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<LatLon>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/me/location',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = LatLon.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<LatLon> postLocation(location) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Content-Type': 'application/json'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(location.toJson());
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<LatLon>(Options(
+                method: 'POST',
+                headers: _headers,
+                extra: _extra,
+                contentType: 'application/json')
+            .compose(_dio.options, '/me/location',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = LatLon.fromJson(_result.data!);
     return value;
   }
 

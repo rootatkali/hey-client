@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:hey/api/endpoints.dart';
+import 'package:hey/model/latlon.dart';
 import 'package:hey/model/login.dart';
 import 'package:hey/model/mashov_login.dart';
 import 'package:hey/model/school.dart';
@@ -42,7 +43,16 @@ abstract class ApiClient {
   @Headers(<String, dynamic>{
     "Content-Type": "application/json"
   })
-  Future<User> editMe(@Body() User edit);
+  Future<User> editMe(@Body(nullToAbsent: true) User edit);
+
+  @GET(Endpoints.getLocation)
+  Future<LatLon> getMyLocation();
+
+  @POST(Endpoints.setLocation)
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json"
+  })
+  Future<LatLon> postLocation(@Body() LatLon location);
 
   @GET(Endpoints.getUsers)
   Future<List<User>> getUsers();

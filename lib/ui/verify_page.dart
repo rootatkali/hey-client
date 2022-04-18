@@ -5,6 +5,7 @@ import 'package:hey/model/user.dart';
 import 'package:hey/ui/details_page.dart';
 import 'package:hey/util/constants.dart';
 import 'package:hey/util/log.dart';
+import 'package:hey/util/step_advancer.dart';
 
 class VerifyPage extends StatefulWidget with Log {
   static const path = "/verify";
@@ -136,10 +137,10 @@ class _VerifyPageState extends State<VerifyPage> {
   Widget _controls(BuildContext context, ControlsDetails details) {
     final step = details.stepIndex;
 
-    final advance = <int, _StepAdvancer>{
-      0: _StepAdvancer("Next", _validateSchool),
-      1: _StepAdvancer("Log in", _mashovLogin),
-      2: _StepAdvancer("Next", _advance),
+    final advance = <int, StepAdvancer>{
+      0: StepAdvancer("Next", _validateSchool), // school select
+      1: StepAdvancer("Log in", _mashovLogin), // login to mashov
+      2: StepAdvancer("Next", _advance), // next page
     };
 
     final sa = advance[step]!;
@@ -187,11 +188,4 @@ class _VerifyPageState extends State<VerifyPage> {
       widget.log.wtf('Details page callback not user: $callback');
     }
   }
-}
-
-class _StepAdvancer {
-  final String text;
-  final VoidCallback onClick;
-
-  _StepAdvancer(this.text, this.onClick);
 }

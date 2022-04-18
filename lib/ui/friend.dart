@@ -11,42 +11,60 @@ import 'package:hey/ui/home_page.dart';
 class Friend extends StatelessWidget {
   final ImageProvider<Object> profilePicture;
   final String name;
-  final Widget callToAction;
+  final FriendStatus status;
   final VoidCallback onPressed;
+  final Widget callToAction;
 
   const Friend(
-      {Key? key,
-      required this.profilePicture,
+      {Key? key, required this.profilePicture,
       required this.name,
-      required this.callToAction,
-      required this.onPressed})
-      : super(key: key);
+      required this.status,
+      required this.onPressed,
+      required this.callToAction}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed,
-      child: Container(
-        margin: const EdgeInsets.all(8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            CircleAvatar(
-              backgroundColor: Theme.of(context).primaryColorDark,
-              radius: 35,
-              child: CircleAvatar(
-                backgroundImage: profilePicture,
-                radius: 30,
+      child: Card(
+        elevation: 2,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              CircleAvatar(
+                backgroundColor: status.color,
+                radius: 35,
+                child: CircleAvatar(
+                  backgroundImage: profilePicture,
+                  radius: 30,
+                ),
               ),
-            ),
-            Padding( // TODO Insert status indicator
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Text(name), // TODO Style
-            ),
-            callToAction
-          ],
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Text(name), // TODO Style
+              ),
+              callToAction
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+enum FriendStatus {
+  online, away, doNotDisturb, offline
+}
+
+final _statusColors = <FriendStatus, Color>{
+  FriendStatus.online: Colors.green.shade800,
+  FriendStatus.away: Colors.amber.shade800,
+  FriendStatus.doNotDisturb: Colors.red.shade900,
+  FriendStatus.offline: Colors.white30,
+};
+
+extension on FriendStatus {
+  Color get color => _statusColors[this]!;
 }
