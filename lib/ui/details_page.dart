@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hey/model/interest.dart';
 import 'package:hey/model/user.dart';
+import 'package:hey/ui/interest_picker.dart';
 import 'package:hey/util/constants.dart';
 import 'package:hey/util/log.dart';
 import 'package:hey/util/step_advancer.dart';
@@ -54,7 +56,8 @@ class _DetailsPageState extends State<DetailsPage> {
                           TextField(
                             controller: _address['street'],
                             decoration: const InputDecoration(
-                                labelText: 'Street and number'),
+                              labelText: 'Street and number',
+                            ),
                           ),
                           TextField(
                             controller: _address['town'],
@@ -78,8 +81,17 @@ class _DetailsPageState extends State<DetailsPage> {
                   ),
                   Step(
                     title: const Text('Your interests'),
-                    content: Container(
-                      // TODO Insert interests picker (autocomplete?)
+                    content: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<List<Interest>>(
+                            builder: (ctx) => const InterestPicker(),
+                            fullscreenDialog: true,
+                          ),
+                        );
+                      },
+                      child: const Text('Select interests'),
                     ),
                   ),
                 ],
@@ -97,7 +109,7 @@ class _DetailsPageState extends State<DetailsPage> {
 
     final advance = <int, StepAdvancer>{
       0: StepAdvancer('Next', _submitAddress), // address select
-      1: StepAdvancer('Next', () => setState(() => _step++)), // bio
+      1: StepAdvancer('Next', _next), // bio, api action in _finish
       2: StepAdvancer('Done', _finish), // interests
     };
 
@@ -115,8 +127,6 @@ class _DetailsPageState extends State<DetailsPage> {
     final body = User(bio: _bio.text);
     final callback = await Constants.api.editMe(body);
 
-    // TODO Submit interests
-
     Navigator.pop(context, callback);
   }
 
@@ -126,8 +136,10 @@ class _DetailsPageState extends State<DetailsPage> {
     final locationCallback = await Constants.api.postLocation(location);
     widget.log.i(locationCallback);
 
-    setState(() {
-      _step++;
-    });
+    _next();
   }
+
+  void _next() => setState(() {
+    _step++;
+  });
 }

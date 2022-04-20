@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hey/ui/details_page.dart';
+import 'package:hey/ui/friend_page.dart';
 import 'package:hey/ui/home_page.dart';
 import 'package:hey/ui/login_page.dart';
 import 'package:hey/ui/register_page.dart';
@@ -7,11 +8,11 @@ import 'package:hey/ui/splash_page.dart';
 import 'package:hey/ui/verify_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const HeyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class HeyApp extends StatelessWidget {
+  const HeyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -28,9 +29,10 @@ class MyApp extends StatelessWidget {
         HomePage.path: (ctx) => const HomePage(),
         VerifyPage.path: (ctx) => const VerifyPage(),
         DetailsPage.path: (ctx) => const DetailsPage(),
+        FriendPage.path: (ctx) => const FriendPage(),
       },
       initialRoute: HomePage.path,
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
     );
   }
 }

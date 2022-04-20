@@ -17,9 +17,19 @@ class Endpoints {
   static const getSchools = "/schools";
   static const isVerified = "/verify";
   static const verifyMashov = "/verify/mashov";
+  static const manualSchool = "/verify/debug/school";
 
   // Interests
   static const getInterests = "/interests";
+  static const addInterest = "/interests";
+  static const getMyInterests = "/me/interests";
+  static const setMyInterests = "/me/interests";
 
+  // Match
+  static const getMatches = "/match";
+
+  // Profile picture
+  static userPicture(String id) => "/users/$id/pfp";
+  static const placeholderImage = 'https://flutter.github.io'
+      '/assets-for-api-docs/assets/widgets/owl.jpg';
 }
-

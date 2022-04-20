@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:hey/api/endpoints.dart';
+import 'package:hey/model/friend_view.dart';
+import 'package:hey/model/interest.dart';
 import 'package:hey/model/latlon.dart';
 import 'package:hey/model/login.dart';
 import 'package:hey/model/mashov_login.dart';
@@ -71,4 +73,31 @@ abstract class ApiClient {
     "Content-Type": "application/json"
   })
   Future<User> verifyMashov(@Body() MashovLogin login);
+
+  @POST(Endpoints.manualSchool)
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json"
+  })
+  Future<User> manuallySetSchool(@Body() School school);
+
+  @GET(Endpoints.getInterests)
+  Future<List<Interest>> getInterests();
+
+  @POST(Endpoints.addInterest)
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json"
+  })
+  Future<Interest> addInterest(@Body() String name);
+
+  @GET(Endpoints.getMyInterests)
+  Future<List<Interest>> getMyInterests();
+
+  @PUT(Endpoints.setMyInterests)
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json"
+  })
+  Future<List<Interest>> setMyInterests(@Body() List<Interest> interests);
+
+  @GET(Endpoints.getMatches)
+  Future<List<FriendView>> getMatches();
 }

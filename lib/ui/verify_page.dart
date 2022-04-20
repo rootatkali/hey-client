@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hey/model/mashov_login.dart';
 import 'package:hey/model/school.dart';
@@ -170,9 +173,25 @@ class _VerifyPageState extends State<VerifyPage> {
     final username = _user.text;
     final password = _pass.text;
 
-    final login = MashovLogin(semel, year, username, password);
+    // if test login for mashov, manually set school and details
+    if (kDebugMode && username == 'test' && password == 'test') {
+      // Set user school
+      await Constants.api.manuallySetSchool(_selected!);
 
-    _callback = await Constants.api.verifyMashov(login);
+      // Set user gender and grade
+      final random = Random();
+      final request = User(
+        grade: random.nextInt(6) + 7,
+        gender: 'MFOX'.characters.elementAt(random.nextInt(4)),
+      );
+
+      _callback = await Constants.api.editMe(request);
+
+    } else {
+      final login = MashovLogin(semel, year, username, password);
+
+      _callback = await Constants.api.verifyMashov(login);
+    }
 
     setState(() {
       _step++;

@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hey/api/cookie_interceptor.dart';
+import 'package:hey/api/endpoints.dart';
+import 'package:hey/model/friend_view.dart';
 import 'package:hey/model/user.dart';
 import 'package:hey/ui/friend.dart';
+import 'package:hey/ui/friend_page.dart';
 import 'package:hey/ui/login_page.dart';
 import 'package:hey/util/constants.dart';
 import 'package:hey/util/log.dart';
@@ -75,19 +78,20 @@ class _HomePageState extends State<HomePage> {
             color: Theme.of(context).primaryColorDark,
           ),
         ),
-        actions: [
+        actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextButton(
               onPressed: _profile,
               child: Icon(
                 // TODO Replace with CircleAvatar
-                Icons.account_circle_outlined,
+                // Icons.account_circle_outlined,
+                Icons.logout,
                 color: Theme.of(context).primaryColorDark,
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
-                    Theme.of(context).primaryColorLight),
+                    Theme.of(context).primaryColorLight.withOpacity(0.6)),
                 shape: MaterialStateProperty.all(const CircleBorder()),
               ),
             ),
@@ -124,24 +128,25 @@ class _HomePageState extends State<HomePage> {
 
   Widget _generatePendingRequests() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
+      padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text('New friend requests go here'),
           Row(
             children: [
+              // TODO Remove placeholder friend
               Friend(
                 profilePicture: const NetworkImage(
-                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+                  Endpoints.placeholderImage,
                 ),
-                name: "Friend",
+                name: 'Placeholder',
                 status: FriendStatus.online,
                 callToAction: ElevatedButton(
-                  onPressed: () => widget.log.i('CTA pressed'),
+                  onPressed: () => widget.log.i('Placeholder CTA pressed'),
                   child: const Text('hello'),
                 ),
-                onPressed: () => widget.log.i('Card pressed'),
+                onPressed: () => widget.log.i('Placeholder card pressed'),
               ),
             ],
           )
@@ -152,15 +157,92 @@ class _HomePageState extends State<HomePage> {
 
   Widget _generateFriendList() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.all(8),
       child: const Text('Friend list goes here'),
     );
   }
 
   Widget _generateSuggestions() {
+    final scroll = ScrollController();
+
     return Container(
-      padding: const EdgeInsets.fromLTRB(0, 8, 0, 16),
-      child: const Text('Friend suggestions go here'),
+      padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Suggestions for you',
+            style: TextStyle(
+                color: Theme.of(context).primaryColorDark, fontSize: 20),
+          ),
+          FutureBuilder<List<FriendView>>(
+            future: _fetchSuggestions(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final list = snapshot.data!;
+
+                if (list.isEmpty) {
+                  return const Text(
+                    'No suggestions at the moment. Come back later for more!',
+                  );
+                }
+
+                return SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 150,
+                  child: ListView.builder(
+                    itemCount: list.length,
+                    scrollDirection: Axis.horizontal,
+                    controller: scroll,
+                    itemBuilder: (ctx, index) {
+                      final friend = snapshot.data![index];
+                      return Friend(
+                        profilePicture: const NetworkImage(
+                          // TODO Replace
+                          Endpoints.placeholderImage,
+                        ),
+                        name: friend.name,
+                        status: FriendStatus.online, // TODO Implement status
+                        onPressed: () => _openFriendPage(friend),
+                        callToAction: ElevatedButton.icon(
+                          icon: const Icon(Icons.person_add),
+                          label: const Text('Add friend'),
+                          onPressed: friend.status != 'FRIEND'
+                              ? () {
+                                  // TODO Add friend
+                                  widget.log
+                                      .i('CTA for suggestion ${friend.name}');
+                                }
+                              : null, // if already friend - button disabled
+                        ),
+                      );
+                    },
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return Text(
+                  snapshot.error!.toString(),
+                  style: TextStyle(color: Colors.red[900]),
+                );
+              }
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+          )
+        ],
+      ),
     );
+  }
+
+  Future<List<FriendView>> _fetchSuggestions() async {
+    final callback = await Constants.api.getMatches();
+    widget.log.i(callback);
+    return callback;
+  }
+
+  void _openFriendPage(FriendView friend) {
+    widget.log.i('Opening FriendPage for friend ${friend.name}');
+    Navigator.pushNamed(context, FriendPage.path, arguments: friend);
   }
 }

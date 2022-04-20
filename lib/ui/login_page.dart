@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                 if (!_loading)
                   Container(
                     padding: const EdgeInsets.all(16),
-                    child: ElevatedButton(
+                    child: OutlinedButton(
                       onPressed: register,
                       child: const Text('Not registered?'),
                     ),
