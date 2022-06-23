@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hey/api/encryption.dart';
+import 'package:hey/ui/chat_page.dart';
 import 'package:hey/ui/details_page.dart';
 import 'package:hey/ui/friend_page.dart';
 import 'package:hey/ui/home_page.dart';
@@ -14,13 +16,14 @@ void main() {
 class HeyApp extends StatelessWidget {
   const HeyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Hey',
       theme: ThemeData(
         primarySwatch: Colors.green,
+        useMaterial3: false,
       ),
       routes: {
         SplashPage.path: (ctx) => const SplashPage(),
@@ -30,6 +33,7 @@ class HeyApp extends StatelessWidget {
         VerifyPage.path: (ctx) => const VerifyPage(),
         DetailsPage.path: (ctx) => const DetailsPage(),
         FriendPage.path: (ctx) => const FriendPage(),
+        ChatPage.path : (ctx) => const ChatPage(),
       },
       initialRoute: HomePage.path,
       debugShowCheckedModeBanner: true,

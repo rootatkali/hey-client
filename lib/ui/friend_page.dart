@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hey/api/endpoints.dart';
 import 'package:hey/model/friend_view.dart';
+import 'package:hey/ui/chat_page.dart';
+import 'package:hey/util/constants.dart';
 import 'package:hey/util/log.dart';
 import 'package:intl/intl.dart' show NumberFormat;
 
@@ -15,9 +17,12 @@ class FriendPage extends StatefulWidget with Log {
 }
 
 class _FriendPageState extends State<FriendPage> {
+  FriendView? friendView;
+
   @override
   Widget build(BuildContext context) {
-    final friend = ModalRoute.of(context)!.settings.arguments as FriendView;
+    friendView ??= ModalRoute.of(context)!.settings.arguments as FriendView;
+    final friend = friendView!;
 
     return Scaffold(
       body: CustomScrollView(
@@ -151,15 +156,48 @@ class _FriendPageState extends State<FriendPage> {
   }
 
   Widget _generateCta(FriendView friend) {
-    // TODO Implement CTA
-    return const Center(
+    final ctas = <String, _Cta>{
+      "STRANGER": _Cta("Add friend", Icons.person_add, (friend) async {
+        final callback = await Constants.api.requestFriend(friend.id);
+        setState(() {
+          friendView = callback;
+        });
+      }),
+      "PENDING": friend.initiated
+          ? _Cta("Accept friend", Icons.favorite, (friend) async {
+              final callback = await Constants.api.approveFriendRequest(friend.id);
+              setState(() {
+                friendView = callback;
+              });
+            })
+          : _Cta("Cancel friend request", Icons.person_add_disabled, null),
+      "FRIEND": _Cta("Chat", Icons.chat, (friend) {
+        Navigator.pushNamed(context, ChatPage.path, arguments: friend);
+      }),
+      "REJECTED": _Cta("Add friend", Icons.person_add, null) // disabled button
+    };
+
+    final cta = ctas[friend.status!]!;
+
+    final onPressed = cta.callback != null ? () => cta.callback!(friend) : null;
+
+    return Center(
       child: Padding(
-        padding: EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          onPressed: null,
-          child: Text('CTA To be developed'),
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton.icon(
+          icon: Icon(cta.icon),
+          label: Text(cta.title),
+          onPressed: onPressed,
         ),
       ),
     );
   }
+}
+
+class _Cta {
+  final String title;
+  final IconData icon;
+  final void Function(FriendView)? callback;
+
+  _Cta(this.title, this.icon, this.callback);
 }

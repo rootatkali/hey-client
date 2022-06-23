@@ -12,7 +12,7 @@ class Friend extends StatelessWidget {
   final ImageProvider<Object> profilePicture;
   final String name;
   final FriendStatus status;
-  final VoidCallback onPressed;
+  final void Function() onPressed;
   final Widget callToAction;
 
   const Friend(

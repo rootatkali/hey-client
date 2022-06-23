@@ -1,6 +1,12 @@
+import 'package:hey/model/friend_view.dart';
+import 'package:hey/model/user.dart';
+
 class Endpoints {
+  Endpoints._();
+
   /// The base URL of the API
-  static const baseUrl = "http://127.0.0.1:8080/api";
+  static const baseUrl = "http://62.90.120.131:8080/api";
+  static const socketUri = "http://62.90.120.131:8080/ws";
 
   // Users
   static const getUsers = "/users";
@@ -28,8 +34,28 @@ class Endpoints {
   // Match
   static const getMatches = "/match";
 
+  // Friends
+  static const getFriends = "/friends";
+  static const getPendingRequests = "/friends/pending";
+  static const postFriendRequest = "/friends/{friend}";
+  static const deleteFriendRequest = "/friends/{friend}";
+  static const approveFriendRequest = "/friends/{friend}/approve"; // PUT
+  static const rejectFriendRequest = "/friends/{friend}/reject"; // PUT
+
   // Profile picture
   static userPicture(String id) => "/users/$id/pfp";
   static const placeholderImage = 'https://flutter.github.io'
       '/assets-for-api-docs/assets/widgets/owl.jpg';
+
+  // Public key
+  static const storeKey = "/key";
+  static const retrieveKey = "/key/{user}";
+
+  // Chat
+  // WebSocket
+  static messageQueue(User user, FriendView friend) => "/user/${user.id}/queue/messages/${friend.id}";
+  static const sendMessage = "/app/chat";
+  // HTTP
+  static const getMessage = "/messages/{id}";
+  static const getChatHistory = "/chats/{friend}";
 }

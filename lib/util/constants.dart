@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:hey/api/api_client.dart';
+import 'package:hey/api/chat_service.dart';
 import 'package:hey/api/cookie_interceptor.dart';
 import 'package:hey/api/endpoints.dart';
 import 'package:hey/api/location_service.dart';
@@ -22,4 +23,7 @@ class Constants {
   );
 
   static final locationService = LocationService(secret.mapsApiKey);
+
+  static const chatService = ChatService();
+
 }

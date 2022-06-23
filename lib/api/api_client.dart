@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart' hide Headers;
+import 'package:hey/api/encryption.dart';
 import 'package:hey/api/endpoints.dart';
+import 'package:hey/model/chat_message.dart';
 import 'package:hey/model/friend_view.dart';
 import 'package:hey/model/interest.dart';
 import 'package:hey/model/latlon.dart';
@@ -100,4 +102,40 @@ abstract class ApiClient {
 
   @GET(Endpoints.getMatches)
   Future<List<FriendView>> getMatches();
+
+  // Friends
+  @GET(Endpoints.getFriends)
+  Future<List<FriendView>> getFriends();
+
+  @GET(Endpoints.getPendingRequests)
+  Future<List<FriendView>> getPendingFriendRequests();
+
+  @POST(Endpoints.postFriendRequest)
+  Future<FriendView> requestFriend(@Path() String friend);
+
+  @DELETE(Endpoints.deleteFriendRequest)
+  Future<FriendView> deleteRequest(@Path() String friend);
+
+  @PUT(Endpoints.approveFriendRequest)
+  Future<FriendView> approveFriendRequest(@Path() String friend);
+
+  @PUT(Endpoints.rejectFriendRequest)
+  Future<FriendView> rejectFriendRequest(@Path() String friend);
+
+  // Key
+  @POST(Endpoints.storeKey)
+  @Headers(<String, dynamic>{
+    "Content-Type": "application/json"
+  })
+  Future<PublicKey> storeKey(@Body() String jwk);
+
+  @GET(Endpoints.retrieveKey)
+  Future<String> retrieveKey(@Path() String user);
+
+  // Chat
+  @GET(Endpoints.getChatHistory)
+  Future<List<Message>> getChatHistory(@Path() String friend);
+
+  @GET(Endpoints.getMessage)
+  Future<Message> getMessage(@Path() String id);
 }

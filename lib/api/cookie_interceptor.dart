@@ -83,4 +83,12 @@ class CookieInterceptor extends Interceptor {
 
     handler.next(response);
   }
+
+  Future<String> fetchAuth() async {
+    _prefs ??= await SharedPreferences.getInstance();
+    final cookies = _prefs!.getStringList(key)!
+    .map((e) => SerializableCookie.fromJson(e).cookie).toList();
+
+    return cookies.firstWhere((c) => c.name == 'token').value;
+  }
 }

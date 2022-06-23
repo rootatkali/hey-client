@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
         // do not allow back button
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('Hey'),
+            title: const Text('Hey, you'),
             automaticallyImplyLeading: false,
           ),
           body: Center(
@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.all(16),
                     child: OutlinedButton(
                       onPressed: register,
-                      child: const Text('Not registered?'),
+                      child: const Text('New here? Sign up'),
                     ),
                   ),
                 if (_loading)

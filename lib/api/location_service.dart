@@ -36,7 +36,7 @@ class LocationService with Log {
     final latLon = LatLon(geocode?.results?[0].geometry?.location?.lat ?? 0,
         geocode?.results?[0].geometry?.location?.lng ?? 0);
 
-    if (latLon.lat == 0 || latLon.lon == 0) {
+    if (latLon.lat == 0 && latLon.lon == 0) {
       log.wtf("Error fetching location");
       throw Exception("Location (0,0)");
     }
